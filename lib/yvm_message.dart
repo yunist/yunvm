@@ -67,6 +67,54 @@ final Symbol VMClosedMessage_vmAlias=_GetClassMemberSymbol(VMClosedMessage,'vmAl
 final Symbol VMClosedMessage_sourceMessage=_GetClassMemberSymbol(VMClosedMessage,'sourceMessage');
 final Symbol VMClosedMessage_sourceMSGKEY=_GetClassMemberSymbol(VMClosedMessage,'sourceMSGKEY');
 
+final Symbol RegisterPortMessage_MSGID=Message_MSGID;
+final Symbol RegisterPortMessage_MSGKEY=Message_MSGKEY;
+final Symbol RegisterPortMessage_MSGCLASS=Message_MSGCLASS;
+final Symbol RegisterPortMessage_MSGCALLBACK=Message_MSGCALLBACK;
+final Symbol RegisterPortMessage_aliasName=_GetClassMemberSymbol(RegisterPortMessage,'aliasName');
+final Symbol RegisterPortMessage_vmPort=_GetClassMemberSymbol(RegisterPortMessage,'vmPort');
+
+final Symbol UnregisterPortMessage_MSGID=Message_MSGID;
+final Symbol UnregisterPortMessage_MSGKEY=Message_MSGKEY;
+final Symbol UnregisterPortMessage_MSGCLASS=Message_MSGCLASS;
+final Symbol UnregisterPortMessage_MSGCALLBACK=Message_MSGCALLBACK;
+final Symbol UnregisterPortMessage_aliasName=_GetClassMemberSymbol(UnregisterPortMessage,'aliasName');
+
+final Symbol AddListenerMessage_MSGID=Message_MSGID;
+final Symbol AddListenerMessage_MSGKEY=Message_MSGKEY;
+final Symbol AddListenerMessage_MSGCLASS=Message_MSGCLASS;
+final Symbol AddListenerMessage_MSGCALLBACK=Message_MSGCALLBACK;
+final Symbol AddListenerMessage_messageID=_GetClassMemberSymbol(AddListenerMessage,'messageID');
+final Symbol AddListenerMessage_aliasName=_GetClassMemberSymbol(AddListenerMessage,'aliasName');
+
+final Symbol RemoveListenerMessage_MSGID=Message_MSGID;
+final Symbol RemoveListenerMessage_MSGKEY=Message_MSGKEY;
+final Symbol RemoveListenerMessage_MSGCLASS=Message_MSGCLASS;
+final Symbol RemoveListenerMessage_MSGCALLBACK=Message_MSGCALLBACK;
+final Symbol RemoveListenerMessage_messageID=_GetClassMemberSymbol(RemoveListenerMessage,'messageID');
+final Symbol RemoveListenerMessage_aliasName=_GetClassMemberSymbol(RemoveListenerMessage,'aliasName');
+
+final Symbol SetStatusMessage_MSGID=Message_MSGID;
+final Symbol SetStatusMessage_MSGKEY=Message_MSGKEY;
+final Symbol SetStatusMessage_MSGCLASS=Message_MSGCLASS;
+final Symbol SetStatusMessage_MSGCALLBACK=Message_MSGCALLBACK;
+final Symbol SetStatusMessage_statusKey=_GetClassMemberSymbol(SetStatusMessage,'statusKey');
+final Symbol SetStatusMessage_statusValue=_GetClassMemberSymbol(SetStatusMessage,'statusValue');
+
+final Symbol UnsetStatusMessage_MSGID=Message_MSGID;
+final Symbol UnsetStatusMessage_MSGKEY=Message_MSGKEY;
+final Symbol UnsetStatusMessage_MSGCLASS=Message_MSGCLASS;
+final Symbol UnsetStatusMessage_MSGCALLBACK=Message_MSGCALLBACK;
+final Symbol UnsetStatusMessage_statusKey=_GetClassMemberSymbol(UnsetStatusMessage,'statusKey');
+
+final Symbol StatusChangedMessage_MSGID=Message_MSGID;
+final Symbol StatusChangedMessage_MSGKEY=Message_MSGKEY;
+final Symbol StatusChangedMessage_MSGCLASS=Message_MSGCLASS;
+final Symbol StatusChangedMessage_MSGCALLBACK=Message_MSGCALLBACK;
+final Symbol StatusChangedMessage_statusKey=_GetClassMemberSymbol(StatusChangedMessage,'statusKey');
+final Symbol StatusChangedMessage_oldStatusValue=_GetClassMemberSymbol(StatusChangedMessage,'oldStatusValue');
+final Symbol StatusChangedMessage_newStatusValue=_GetClassMemberSymbol(StatusChangedMessage,'newStatusValue');
+
 Symbol _GetClassMemberSymbol(Type type,String name)
 {
   var mtype=reflectClass(type);
@@ -333,6 +381,227 @@ class VMClosedMessage extends Message
       ..vmAlias=map[VMClosedMessage_vmAlias]
       ..sourceMessage=Message.FromMap(map[VMClosedMessage_sourceMessage])
       ..sourceMSGKEY=map[VMClosedMessage_sourceMSGKEY]
+    ;
+  }
+}
+
+class RegisterPortMessage extends Message
+{
+  static int _keySerial=0;
+  static Symbol SimpleName=reflectType(RegisterPortMessage).simpleName;
+  final IDkey MSGID=SimpleName;
+  final String MSGKEY=SimpleName.toString()+':'
+      +((_keySerial<0xFFFFFFFF)?(++_keySerial):1).toString();
+  ClassMirror MSGCLASS=reflectClass(RegisterPortMessage);
+
+  String aliasName;
+  SendPort vmPort;
+
+  Map<Symbol,dynamic> toMap()
+  {
+    return {
+      RegisterPortMessage_MSGID:MSGID,
+      RegisterPortMessage_MSGKEY:MSGKEY,
+      RegisterPortMessage_MSGCLASS:MSGCLASS,
+      RegisterPortMessage_MSGCALLBACK:MSGCALLBACK,
+      RegisterPortMessage_aliasName:aliasName,
+      RegisterPortMessage_vmPort:vmPort,
+    };
+  }
+  dynamic fromMap(Map<Symbol,dynamic> map)
+  {
+    return new RegisterPortMessage()
+      ..aliasName=map[RegisterPortMessage_aliasName]
+      ..vmPort=map[RegisterPortMessage_vmPort]
+    ;
+  }
+}
+
+class UnregisterPortMessage extends Message
+{
+  static int _keySerial=0;
+  static Symbol SimpleName=reflectType(UnregisterPortMessage).simpleName;
+  final IDkey MSGID=SimpleName;
+  final String MSGKEY=SimpleName.toString()+':'
+      +((_keySerial<0xFFFFFFFF)?(++_keySerial):1).toString();
+  ClassMirror MSGCLASS=reflectClass(UnregisterPortMessage);
+
+  String aliasName;
+
+  Map<Symbol,dynamic> toMap()
+  {
+    return {
+      UnregisterPortMessage_MSGID:MSGID,
+      UnregisterPortMessage_MSGKEY:MSGKEY,
+      UnregisterPortMessage_MSGCLASS:MSGCLASS,
+      UnregisterPortMessage_MSGCALLBACK:MSGCALLBACK,
+      UnregisterPortMessage_aliasName:aliasName,
+    };
+  }
+  dynamic fromMap(Map<Symbol,dynamic> map)
+  {
+    return new UnregisterPortMessage()
+      ..aliasName=map[UnregisterPortMessage_aliasName]
+    ;
+  }
+}
+
+class AddListenerMessage extends Message
+{
+  static int _keySerial=0;
+  static Symbol SimpleName=reflectType(AddListenerMessage).simpleName;
+  final IDkey MSGID=SimpleName;
+  final String MSGKEY=SimpleName.toString()+':'
+      +((_keySerial<0xFFFFFFFF)?(++_keySerial):1).toString();
+  ClassMirror MSGCLASS=reflectClass(AddListenerMessage);
+
+  IDkey messageID;
+  String aliasName;
+
+  Map<Symbol,dynamic> toMap()
+  {
+    return {
+      AddListenerMessage_MSGID:MSGID,
+      AddListenerMessage_MSGKEY:MSGKEY,
+      AddListenerMessage_MSGCLASS:MSGCLASS,
+      AddListenerMessage_MSGCALLBACK:MSGCALLBACK,
+      AddListenerMessage_messageID:messageID,
+      AddListenerMessage_aliasName:aliasName,
+    };
+  }
+  dynamic fromMap(Map<Symbol,dynamic> map)
+  {
+    return new AddListenerMessage()
+      ..messageID=map[AddListenerMessage_messageID]
+      ..aliasName=map[AddListenerMessage_aliasName]
+    ;
+  }
+}
+
+class RemoveListenerMessage extends Message
+{
+  static int _keySerial=0;
+  static Symbol SimpleName=reflectType(RemoveListenerMessage).simpleName;
+  final IDkey MSGID=SimpleName;
+  final String MSGKEY=SimpleName.toString()+':'
+      +((_keySerial<0xFFFFFFFF)?(++_keySerial):1).toString();
+  ClassMirror MSGCLASS=reflectClass(RemoveListenerMessage);
+
+  IDkey messageID;
+  String aliasName;
+
+  Map<Symbol,dynamic> toMap()
+  {
+    return {
+      RemoveListenerMessage_MSGID:MSGID,
+      RemoveListenerMessage_MSGKEY:MSGKEY,
+      RemoveListenerMessage_MSGCLASS:MSGCLASS,
+      RemoveListenerMessage_MSGCALLBACK:MSGCALLBACK,
+      RemoveListenerMessage_messageID:messageID,
+      RemoveListenerMessage_aliasName:aliasName,
+    };
+  }
+  dynamic fromMap(Map<Symbol,dynamic> map)
+  {
+    return new RemoveListenerMessage()
+      ..messageID=map[RemoveListenerMessage_messageID]
+      ..aliasName=map[RemoveListenerMessage_aliasName]
+    ;
+  }
+}
+
+class SetStatusMessage extends Message
+{
+  static int _keySerial=0;
+  static Symbol SimpleName=reflectType(SetStatusMessage).simpleName;
+  final IDkey MSGID=SimpleName;
+  final String MSGKEY=SimpleName.toString()+':'
+      +((_keySerial<0xFFFFFFFF)?(++_keySerial):1).toString();
+  ClassMirror MSGCLASS=reflectClass(SetStatusMessage);
+
+  String statusKey;
+  dynamic statusValue;
+
+  Map<Symbol,dynamic> toMap()
+  {
+    return {
+      SetStatusMessage_MSGID:MSGID,
+      SetStatusMessage_MSGKEY:MSGKEY,
+      SetStatusMessage_MSGCLASS:MSGCLASS,
+      SetStatusMessage_MSGCALLBACK:MSGCALLBACK,
+      SetStatusMessage_statusKey:statusKey,
+      SetStatusMessage_statusValue:statusValue,
+    };
+  }
+  dynamic fromMap(Map<Symbol,dynamic> map)
+  {
+    return new SetStatusMessage()
+      ..statusKey=map[SetStatusMessage_statusKey]
+      ..statusValue=map[SetStatusMessage_statusValue]
+    ;
+  }
+}
+
+class UnsetStatusMessage extends Message
+{
+  static int _keySerial=0;
+  static Symbol SimpleName=reflectType(UnsetStatusMessage).simpleName;
+  final IDkey MSGID=SimpleName;
+  final String MSGKEY=SimpleName.toString()+':'
+      +((_keySerial<0xFFFFFFFF)?(++_keySerial):1).toString();
+  ClassMirror MSGCLASS=reflectClass(UnsetStatusMessage);
+
+  String statusKey;
+
+  Map<Symbol,dynamic> toMap()
+  {
+    return {
+      UnsetStatusMessage_MSGID:MSGID,
+      UnsetStatusMessage_MSGKEY:MSGKEY,
+      UnsetStatusMessage_MSGCLASS:MSGCLASS,
+      UnsetStatusMessage_MSGCALLBACK:MSGCALLBACK,
+      UnsetStatusMessage_statusKey:statusKey,
+    };
+  }
+  dynamic fromMap(Map<Symbol,dynamic> map)
+  {
+    return new UnsetStatusMessage()
+      ..statusKey=map[UnsetStatusMessage_statusKey]
+    ;
+  }
+}
+
+class StatusChangedMessage extends Message
+{
+  static int _keySerial=0;
+  static Symbol SimpleName=reflectType(StatusChangedMessage).simpleName;
+  final IDkey MSGID=SimpleName;
+  final String MSGKEY=SimpleName.toString()+':'
+      +((_keySerial<0xFFFFFFFF)?(++_keySerial):1).toString();
+  ClassMirror MSGCLASS=reflectClass(StatusChangedMessage);
+
+  String statusKey;
+  dynamic oldStatusValue;
+  dynamic newStatusValue;
+
+  Map<Symbol,dynamic> toMap()
+  {
+    return {
+      StatusChangedMessage_MSGID:MSGID,
+      StatusChangedMessage_MSGKEY:MSGKEY,
+      StatusChangedMessage_MSGCLASS:MSGCLASS,
+      StatusChangedMessage_MSGCALLBACK:MSGCALLBACK,
+      StatusChangedMessage_statusKey:statusKey,
+      StatusChangedMessage_oldStatusValue:oldStatusValue,
+      StatusChangedMessage_newStatusValue:newStatusValue,
+    };
+  }
+  dynamic fromMap(Map<Symbol,dynamic> map)
+  {
+    return new StatusChangedMessage()
+      ..statusKey=map[StatusChangedMessage_statusKey]
+      ..oldStatusValue=map[StatusChangedMessage_oldStatusValue]
+      ..newStatusValue=map[StatusChangedMessage_newStatusValue]
     ;
   }
 }

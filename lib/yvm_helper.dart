@@ -50,7 +50,10 @@ abstract class yvmWrapper
     isReady=false;
     var isOK=false;
     var completer=new Completer<bool>();
-    var result=SendMessage(null)
+    var msg=new VMClosingMessage()
+                ..vmAlias=vmAlias
+                ..reasonKey=VMClosingMessageKey_WrapperClosing;
+    var result=SendMessage(msg)
         ..then((ok){isOK=(ok==null)?false:ok;})
         ..whenComplete(completer.complete(isOK));
     return completer.future;
@@ -63,50 +66,93 @@ abstract class yvmWrapper
 
     var isOK=false;
     var completer=new Completer<bool>();
-    var result=SendMessage(null)
+    var msg=new RegisterPortMessage()
+                ..aliasName=vmHelper.vmAlias
+                ..vmPort=vmHelper.vmPort;
+    var result=SendMessage(msg)
         ..then((ok){isOK=(ok==null)?false:ok;})
         ..whenComplete(completer.complete(isOK));
     return completer.future;
   }
 
-  Future<bool> UnRegisterPort(yvmWrapper vmHelper)
+  Future<bool> UnregisterPort(yvmWrapper vmHelper)
   {
     if (!isReady)
       return new Future(()=>isReady);
 
     var isOK=false;
     var completer=new Completer<bool>();
-    var result=SendMessage(null)
+    var msg=new UnregisterPortMessage()
+                ..aliasName=vmHelper.vmAlias;
+    var result=SendMessage(msg)
         ..then((ok){isOK=(ok==null)?false:ok;})
         ..whenComplete(completer.complete(isOK));
     return completer.future;
   }
 
-  Future<bool> AddListener(yvmWrapper vmHelper)
+  Future<bool> AddListener(IDkey msgid,yvmWrapper vmHelper)
   {
     if (!isReady)
       return new Future(()=>isReady);
 
     var isOK=false;
     var completer=new Completer<bool>();
-    var result=SendMessage(null)
+    var msg=new AddListenerMessage()
+                ..messageID=msgid
+                ..aliasName=vmHelper.vmAlias;
+    var result=SendMessage(msg)
         ..then((ok){isOK=(ok==null)?false:ok;})
         ..whenComplete(completer.complete(isOK));
     return completer.future;
   }
 
-  Future<bool> RemoveListener(yvmWrapper vmHelper)
+  Future<bool> RemoveListener(IDkey msgid,yvmWrapper vmHelper)
   {
     if (!isReady)
       return new Future(()=>isReady);
 
     var isOK=false;
     var completer=new Completer<bool>();
-    var result=SendMessage(null)
+    var msg=new RemoveListenerMessage()
+                ..messageID=msgid
+                ..aliasName=vmHelper.vmAlias;
+    var result=SendMessage(msg)
         ..then((ok){isOK=(ok==null)?false:ok;})
         ..whenComplete(completer.complete(isOK));
     return completer.future;
   }
+
+  Future<bool> SetStatus(String key,value)
+  {
+    if (!isReady)
+      return new Future(()=>isReady);
+
+    var isOK=false;
+    var completer=new Completer<bool>();
+    var msg=new SetStatusMessage()
+                ..statusKey=key
+                ..statusValue=value;
+    var result=SendMessage(msg)
+        ..then((ok){isOK=(ok==null)?false:ok;})
+        ..whenComplete(completer.complete(isOK));
+    return completer.future;
+  }
+
+  Future<bool> UnsetStatus(String key)
+  {
+    if (!isReady)
+      return new Future(()=>isReady);
+
+    var isOK=false;
+    var completer=new Completer<bool>();
+    var msg=new UnsetStatusMessage()
+                ..statusKey=key;
+    var result=SendMessage(msg)
+        ..then((ok){isOK=(ok==null)?false:ok;})
+        ..whenComplete(completer.complete(isOK));
+    return completer.future;
+  }
+
 
   Future<dynamic> SendMessage(Message msg)
   {
