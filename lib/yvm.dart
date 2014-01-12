@@ -67,3 +67,49 @@ yvm_main(msg)
     }
   }
 }
+
+bool check_type(obj, [List stack])
+{
+  if (obj==null) return true;
+
+  if (stack==null) stack=[];
+
+  final vaild_types=const [num,String,bool,int,double,SendPort];
+
+  var tp=obj.runtimeType;
+
+  if (tp==Map)
+  {
+    if (stack.contains(obj))
+      return true;
+    var b=true;
+    stack.add(obj);
+    for (var o in (obj as Map).keys)
+    {
+      if (b=check_type(o,stack))
+        break;
+      if (b=check_type(obj[o],stack))
+        break;
+    }
+    stack.removeLast();
+    return b;
+  }
+  else if (tp==List)
+  {
+    if (stack.contains(obj))
+      return true;
+    var b=true;
+    stack.add(obj);
+    for (var o in (obj as List))
+      if (b=check_type(o,stack))
+        break;
+    stack.removeLast();
+    return b;
+  }
+
+  for (Type t in vaild_types)
+  {
+    if (tp==t) return true;
+  }
+  return false;
+}

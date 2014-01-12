@@ -9,7 +9,7 @@ abstract class yvmbase
 
   Map<Symbol,List<String>> _EventMap={
     StatusChangedMessage.ID:[Key_Port_Creator,],
-
+    VMClosedMessage.ID:[Key_Port_Creator,],
   };
   Map<String,SendPort> _PortMap={
     Key_Port_Creator:null,
@@ -37,6 +37,65 @@ abstract class yvmbase
 
   Message currentMessage;
 
+  yvmbase()
+  {
+    RegisterFunction(VMClosingMessage.ID,_On_VMClosingMessage);
+    RegisterFunction(RegisterPortMessage.ID,_On_RegisterPortMessage);
+    RegisterFunction(UnregisterPortMessage.ID,_On_UnregisterPortMessage);
+    RegisterFunction(AddListenerMessage.ID,_On_AddListenerMessage);
+    RegisterFunction(RemoveListenerMessage.ID,_On_RemoveListenerMessage);
+    RegisterFunction(SetStatusMessage.ID,_On_SetStatusMessage);
+    RegisterFunction(UnsetStatusMessage.ID,_On_UnsetStatusMessage);
+  }
+
+  bool _On_VMClosingMessage(Message msg)
+  {
+    if (msg is VMClosingMessage)
+      return _CloseVM(msg.vmAlias,msg.reasonKey);
+    return false;
+  }
+
+  bool _On_RegisterPortMessage(Message msg)
+  {
+    if (msg is RegisterPortMessage)
+      return _RegisterPort(msg.aliasName, msg.vmPort);
+    return false;
+  }
+
+  bool _On_UnregisterPortMessage(Message msg)
+  {
+    if (msg is UnregisterPortMessage)
+      return _UnregisterPort(msg.aliasName);
+    return false;
+  }
+
+  bool _On_AddListenerMessage(Message msg)
+  {
+    if (msg is AddListenerMessage)
+      return _AddListener(msg.messageID, msg.aliasName);
+    return false;
+  }
+
+  bool _On_RemoveListenerMessage(Message msg)
+  {
+    if (msg is RemoveListenerMessage)
+      return _RemoveListener(msg.messageID, msg.aliasName);
+    return false;
+  }
+
+  bool _On_SetStatusMessage(Message msg)
+  {
+    if (msg is SetStatusMessage)
+      return _SetStatus(msg.statusKey, msg.statusValue);
+    return false;
+  }
+
+  bool _On_UnsetStatusMessage(Message msg)
+  {
+    if (msg is UnsetStatusMessage)
+      return _UnsetStatus(msg.statusKey);
+    return false;
+  }
 
   bool RegisterFunction(Symbol msgid,Function func)
   {
@@ -52,9 +111,30 @@ abstract class yvmbase
     return (_MessageHandles.remove(msgid)==null)?false:true;
   }
 
-  bool _CloseVM()
+  bool _CloseVM(String name, String reason)
   {
+    if (name!=VMAlias) return false;
 
+    // something to do
+    var b=true;
+    switch(reason)
+    {
+      case VMClosingMessage.reasonKey_WrapperClosing:
+        break;
+      default:
+        b=false;
+        break;
+    }
+
+    if (b)
+    {
+      var msg=new VMClosedMessage()
+                ..sourceMessage=currentMessage
+                ..vmAlias=VMAlias
+                ;
+      PostMessage(msg);
+    }
+    return b;
   }
 
   bool _RegisterPort(String name,SendPort port)
@@ -97,6 +177,8 @@ abstract class yvmbase
 
   bool _SetStatus(String key,value)
   {
+    if (!check_type(value))
+      return false;
     var v=_StatusMap[key];
     if (v!=value)
     {

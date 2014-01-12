@@ -98,3 +98,60 @@ class StatusChangedMessage extends Message
   dynamic oldStatusValue;
   dynamic newStatusValue;
 }
+
+class VMClosingMessage extends Message
+{
+  static final Symbol ID=reflectType(VMClosingMessage).simpleName;
+
+  static const String reasonKey_WrapperClosing='WrapperClosing';
+
+  String vmAlias;
+  String reasonKey;
+}
+
+class VMClosedMessage extends Message
+{
+  static final Symbol ID=reflectType(VMClosedMessage).simpleName;
+  String vmAlias;
+  Message sourceMessage;
+}
+
+class RegisterPortMessage extends Message
+{
+  static final Symbol ID=reflectType(RegisterPortMessage).simpleName;
+  String aliasName;
+  SendPort vmPort;
+}
+
+class UnregisterPortMessage extends Message
+{
+  static final Symbol ID=reflectType(UnregisterPortMessage).simpleName;
+  String aliasName;
+}
+
+class AddListenerMessage extends Message
+{
+  static final Symbol ID=reflectType(AddListenerMessage).simpleName;
+  Symbol messageID;
+  String aliasName;
+}
+
+class RemoveListenerMessage extends Message
+{
+  static final Symbol ID=reflectType(RemoveListenerMessage).simpleName;
+  Symbol messageID;
+  String aliasName;
+}
+
+class SetStatusMessage extends Message
+{
+  static final Symbol ID=reflectType(SetStatusMessage).simpleName;
+  String statusKey;
+  dynamic statusValue;
+}
+
+class UnsetStatusMessage extends Message
+{
+  static final Symbol ID=reflectType(UnsetStatusMessage).simpleName;
+  String statusKey;
+}

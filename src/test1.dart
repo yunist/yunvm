@@ -28,7 +28,7 @@ class testvm extends y.yvmbase
 
 class testwpr extends y.yvmWrapper
 {
-  testwpr():super(testvm)
+  testwpr([String n=null]):super(testvm,n)
   {
 
   }
@@ -41,7 +41,7 @@ class testwpr extends y.yvmWrapper
 
 main()
 {
-  var vms=[new testwpr(),new testwpr(),new testwpr(),new testwpr(),new testwpr(),new testwpr()];
+  var vms=[new testwpr('vm1'),new testwpr(),new testwpr('vm3'),new testwpr(),new testwpr('vm5'),new testwpr()];
   var i=0;
   vms.forEach((v){
     v.CreateVM()..then((ready){
@@ -51,7 +51,10 @@ main()
         v.SendMessage(new testmsg()..s=(i++).toString())
              .then((onValue){
                  print(onValue);
-                 v.SendMessage(new testmsg()..s=(i++).toString());
+                 v.SendMessage(new testmsg()..s=(i++).toString())
+                 .then((onValue){
+                    print(onValue);
+                 });
              });
       });
     });
