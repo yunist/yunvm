@@ -231,9 +231,13 @@ abstract class yvmbase
     var posted=false;
     bclist.forEach((name){
       var port=_PortMap[name];
+
+
       if (port!=null)
+      {
         posted=true;
         port.send(msg);
+      }
     });
 
     return posted;
